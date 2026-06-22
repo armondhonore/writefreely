@@ -1,0 +1,12 @@
+application:
+  name: writefreely
+  pods:
+  - name: app
+    image: writeas/writefreely:latest
+    path: /
+    servicePorts:
+    - 8080
+    volumes:
+    - name: writefreely-data
+      mountPath: /data
+      size: 5Gi
