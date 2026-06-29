@@ -1,29 +1,8 @@
 application:
   name: writefreely
   pods:
-    - name: app
-      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1507ea1b"
-      path: /
-      servicePorts:
-        - 80
-      vars:
-        DATABASE_URL: "mysql://writefreely:${MYSQL_PASSWORD}@mysql.pod:3306/writefreely?parseTime=true"
-        WRITEFREELY_DB_USER: writefreely
-        WRITEFREELY_DB_NAME: writefreely
-      volumes:
-        - name: writefreely-app-data
-          size: 5Gi
-          mountPath: /var/www/writefreely
-    - name: mysql
-      image: mirror.gcr.io/library/mysql:8
-      servicePorts:
-        - 3306
-      vars:
-        MYSQL_DATABASE: writefreely
-        MYSQL_USER: writefreely
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      volumes:
-        - name: writefreely-mysql-data
-          size: 10Gi
-          mountPath: /var/lib/mysql
+  - name: app
+    image: docker.io/writeas/writefreely:latest
+    path: /
+    servicePorts:
+    - 8080
