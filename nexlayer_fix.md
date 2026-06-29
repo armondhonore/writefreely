@@ -1,7 +1,7 @@
 # Pinned fix — writefreely (#152)
 
-Deploy the STOCK algernon/writefreely:latest image (writeas/writefreely redirects
-here). Its entrypoint auto-generates config.ini, runs migrations, and creates the
-admin user from WRITEFREELY_* env vars on first boot. Listens on :8080, data in /data.
-DO NOT add a custom Dockerfile, do NOT switch to mysql, do NOT change the port to 80,
-do NOT add a PVC. Keep nexlayer.yaml exactly as committed.
+Custom image FROM algernon/writefreely bakes a fully-initialized sqlite data dir at
+/app-data (config + db + keys + admin) as root, chowns it to the writefreely runtime
+user, serves on :8080. NO PVC, NO mysql, NO port 80, NO /data volume mount (the
+inherited /data VOLUME discards build-time writes — that is why /app-data is used).
+DO NOT regenerate the Dockerfile or nexlayer.yaml.
