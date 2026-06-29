@@ -2,7 +2,7 @@ application:
   name: writefreely
   pods:
   - name: app
-    image: mirror.gcr.io/algernon/writefreely:latest
+    image: registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f15655b5d
     path: /
     servicePorts:
     - 8080
