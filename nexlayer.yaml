@@ -2,7 +2,7 @@ application:
   name: writefreely
   pods:
   - name: app
-    image: algernon/writefreely:latest
+    image: mirror.gcr.io/algernon/writefreely:latest
     path: /
     servicePorts:
     - 8080
