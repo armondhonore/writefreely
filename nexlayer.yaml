@@ -1,8 +1,28 @@
 application:
   name: writefreely
   pods:
-  - name: app
-    image: algernon/writefreely:latest
-    path: /
-    servicePorts:
-    - 8080
+    - name: app
+      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f155532b6"
+      path: /
+      servicePorts:
+        - 80
+      vars:
+        DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql.pod:3306/${MYSQL_DATABASE}?parseTime=true"
+        # WriteFreely often requires specific config for the DB
+        DB_USER: "${MYSQL_USER}"
+        DB_PASS: "${MYSQL_PASSWORD}"
+        DB_NAME: "${MYSQL_DATABASE}"
+        DB_HOST: "mysql.pod"
+    - name: mysql
+      image: mirror.gcr.io/library/mysql:8
+      servicePorts:
+        - 3306
+      vars:
+        MYSQL_DATABASE: "writefreely"
+        MYSQL_USER: "${MYSQL_USER}"
+        MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+        MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      volumes:
+        - name: writefreely-mysql-data
+          size: 10Gi
+          mountPath: /var/lib/mysql

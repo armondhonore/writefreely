@@ -15,7 +15,7 @@
 
 ## Project Summary
 <!-- nexlayer:section agent-managed=project_summary -->
-WriteFreely is a minimalist, open-source blogging platform designed for writers to publish content without distractions, focusing on simplicity and privacy.
+WriteFreely is a minimalist, federated blogging platform designed for writers. It provides a distraction-free publishing experience and supports the ActivityPub protocol for decentralized social networking.
 <!-- nexlayer:end -->
 
 ## Technology Stack
@@ -28,14 +28,16 @@ WriteFreely is a minimalist, open-source blogging platform designed for writers 
 
 ## Repository Structure
 <!-- nexlayer:section agent-managed=structure_map -->
-- Dockerfile — Container definition based on writefreely image
-- config.ini — Application configuration settings
-- nexlayer.yaml — Platform orchestration manifest
+- Dockerfile — Container definition utilizing the official WriteFreely image
+- config.ini — Application configuration for database connections and site settings
+- nexlayer.yaml — Nexlayer platform orchestration manifest
 <!-- nexlayer:end -->
 
 ## External Services Required
 <!-- nexlayer:section agent-managed=external_deps -->
-_No external services detected._
+Services that must be configured separately (not deployed by Nexlayer):
+
+- MySQL Database (Required for persistence)
 <!-- nexlayer:end -->
 
 ## Local Development Setup
@@ -85,7 +87,7 @@ application:
   name: writefreely
   pods:
     - name: app
-      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1537de11"
+      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f155532b6"
       path: /
       servicePorts:
         - 80
@@ -135,7 +137,7 @@ application:
 
 ## Nexlayer Configuration
 <!-- nexlayer:section agent-managed=nexlayer_config -->
-**Last deployed:** 2026-06-29T21:16:01Z  
+**Last deployed:** 2026-06-29T21:48:10Z  
 **Live URL:** https://relaxed-weasel-writefreely.cloud.nexlayer.ai  
 **Runtime:**  · **Port:** auto-detected  
 **Deploy branch:** nexlayer  
@@ -145,7 +147,7 @@ application:
   name: writefreely
   pods:
     - name: app
-      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1537de11"
+      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f155532b6"
       path: /
       servicePorts:
         - 80
@@ -176,8 +178,9 @@ application:
 <!-- nexlayer:section agent-managed=build_history -->
 | Date | Status | Notes |
 |------|--------|-------|
-| 2026-06-29T21:10:25Z | analyzed | initial repo analysis |
-| 2026-06-29T21:16:01Z | success | deployed https://relaxed-weasel-writefreely.cloud.nexlayer.ai |
+| 2026-06-29T21:42:32Z | analyzed | initial repo analysis |
+| 2026-06-29T21:48:10Z | success | deployed https://relaxed-weasel-writefreely.cloud.nexlayer.ai |
 <!-- nexlayer:end -->
+
 
 
