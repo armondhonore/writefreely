@@ -2,7 +2,17 @@ application:
   name: writefreely
   pods:
   - name: app
-    image: registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1537de11
+    image: algernon/writefreely:latest
     path: /
     servicePorts:
     - 8080
+    vars:
+      WRITEFREELY_BIND_HOST: 0.0.0.0
+      WRITEFREELY_BIND_PORT: "8080"
+      WRITEFREELY_SITE_NAME: WriteFreely
+      WRITEFREELY_SINGLE_USER: "false"
+      WRITEFREELY_OPEN_REGISTRATION: "true"
+      WRITEFREELY_FEDERATION: "false"
+      WRITEFREELY_PUBLIC_STATS: "true"
+      WRITEFREELY_ADMIN_USER: admin
+      WRITEFREELY_ADMIN_PASSWORD: adminpass123
