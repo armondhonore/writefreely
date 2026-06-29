@@ -15,7 +15,7 @@
 
 ## Project Summary
 <!-- nexlayer:section agent-managed=project_summary -->
-WriteFreely is a federated blogging platform designed for simplicity and ownership, allowing users to publish their thoughts on a decentralized web.
+WriteFreely is a minimalist, open-source blogging platform designed for writers to publish content without distractions, focusing on simplicity and privacy.
 <!-- nexlayer:end -->
 
 ## Technology Stack
@@ -23,12 +23,14 @@ WriteFreely is a federated blogging platform designed for simplicity and ownersh
 | Name | Kind | Version | Detected From |
 |------|------|---------|---------------|
 | Go | language | latest | Dockerfile |
-| MySQL | database | latest | Dockerfile |
+| MySQL | database | latest | config.ini |
 <!-- nexlayer:end -->
 
 ## Repository Structure
 <!-- nexlayer:section agent-managed=structure_map -->
-- Dockerfile — Build configuration using writeas/writefreely base image
+- Dockerfile — Container definition based on writefreely image
+- config.ini — Application configuration settings
+- nexlayer.yaml — Platform orchestration manifest
 <!-- nexlayer:end -->
 
 ## External Services Required
@@ -64,15 +66,15 @@ DATABASE_URL=mysql://user:pass@localhost:3306/writefreely
 
 | Pod | Variable | Value | Kind |
 |-----|----------|-------|------|
-| `app` | `DATABASE_URL` | `"mysql://writefreely:${MYSQL_PASSWORD}@mysql.pod:3306/writefreely?parseTime=true"` | inter-pod |
-| `app` | `WRITEFREELY_DB_USER` | `writefreely` | plain |
-| `app` | `WRITEFREELY_DB_NAME` | `writefreely` | plain |
-| `writefreely-app-data` | `size` | `5Gi` | plain |
-| `writefreely-app-data` | `mountPath` | `/var/www/writefreely` | plain |
-| `mysql` | `MYSQL_DATABASE` | `writefreely` | plain |
-| `mysql` | `MYSQL_USER` | `writefreely` | plain |
-| `mysql` | `MYSQL_PASSWORD` | `${MYSQL_PASSWORD}` | inter-pod |
-| `mysql` | `MYSQL_ROOT_PASSWORD` | `${MYSQL_ROOT_PASSWORD}` | inter-pod |
+| `app` | `DATABASE_URL` | `"mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql.pod:3306/${MYSQL_DATABASE}?parseTime=true"` | inter-pod |
+| `app` | `DB_USER` | `"${MYSQL_USER}"` | inter-pod |
+| `app` | `DB_PASS` | `"${MYSQL_PASSWORD}"` | inter-pod |
+| `app` | `DB_NAME` | `"${MYSQL_DATABASE}"` | inter-pod |
+| `app` | `DB_HOST` | `"mysql.pod"` | plain |
+| `mysql` | `MYSQL_DATABASE` | `"writefreely"` | plain |
+| `mysql` | `MYSQL_USER` | `"${MYSQL_USER}"` | inter-pod |
+| `mysql` | `MYSQL_PASSWORD` | `"${MYSQL_PASSWORD}"` | inter-pod |
+| `mysql` | `MYSQL_ROOT_PASSWORD` | `"${MYSQL_ROOT_PASSWORD}"` | inter-pod |
 | `writefreely-mysql-data` | `size` | `10Gi` | plain |
 | `writefreely-mysql-data` | `mountPath` | `/var/lib/mysql` | plain |
 
@@ -83,27 +85,26 @@ application:
   name: writefreely
   pods:
     - name: app
-      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1523bbce"
+      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1537de11"
       path: /
       servicePorts:
         - 80
       vars:
-        DATABASE_URL: "mysql://writefreely:${MYSQL_PASSWORD}@mysql.pod:3306/writefreely?parseTime=true"
-        WRITEFREELY_DB_USER: writefreely
-        WRITEFREELY_DB_NAME: writefreely
-      volumes:
-        - name: writefreely-app-data
-          size: 5Gi
-          mountPath: /var/www/writefreely
+        DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql.pod:3306/${MYSQL_DATABASE}?parseTime=true"
+        # WriteFreely often requires specific config for the DB
+        DB_USER: "${MYSQL_USER}"
+        DB_PASS: "${MYSQL_PASSWORD}"
+        DB_NAME: "${MYSQL_DATABASE}"
+        DB_HOST: "mysql.pod"
     - name: mysql
       image: mirror.gcr.io/library/mysql:8
       servicePorts:
         - 3306
       vars:
-        MYSQL_DATABASE: writefreely
-        MYSQL_USER: writefreely
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_DATABASE: "writefreely"
+        MYSQL_USER: "${MYSQL_USER}"
+        MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+        MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       volumes:
         - name: writefreely-mysql-data
           size: 10Gi
@@ -134,7 +135,7 @@ application:
 
 ## Nexlayer Configuration
 <!-- nexlayer:section agent-managed=nexlayer_config -->
-**Last deployed:** 2026-06-29T20:54:49Z  
+**Last deployed:** 2026-06-29T21:16:01Z  
 **Live URL:** https://relaxed-weasel-writefreely.cloud.nexlayer.ai  
 **Runtime:**  · **Port:** auto-detected  
 **Deploy branch:** nexlayer  
@@ -144,27 +145,26 @@ application:
   name: writefreely
   pods:
     - name: app
-      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1523bbce"
+      image: "registry.nexlayer.io/user_01kece1xyh817dwff7wnarhkxd/writefreely:19f1537de11"
       path: /
       servicePorts:
         - 80
       vars:
-        DATABASE_URL: "mysql://writefreely:${MYSQL_PASSWORD}@mysql.pod:3306/writefreely?parseTime=true"
-        WRITEFREELY_DB_USER: writefreely
-        WRITEFREELY_DB_NAME: writefreely
-      volumes:
-        - name: writefreely-app-data
-          size: 5Gi
-          mountPath: /var/www/writefreely
+        DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql.pod:3306/${MYSQL_DATABASE}?parseTime=true"
+        # WriteFreely often requires specific config for the DB
+        DB_USER: "${MYSQL_USER}"
+        DB_PASS: "${MYSQL_PASSWORD}"
+        DB_NAME: "${MYSQL_DATABASE}"
+        DB_HOST: "mysql.pod"
     - name: mysql
       image: mirror.gcr.io/library/mysql:8
       servicePorts:
         - 3306
       vars:
-        MYSQL_DATABASE: writefreely
-        MYSQL_USER: writefreely
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_DATABASE: "writefreely"
+        MYSQL_USER: "${MYSQL_USER}"
+        MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+        MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       volumes:
         - name: writefreely-mysql-data
           size: 10Gi
@@ -176,7 +176,8 @@ application:
 <!-- nexlayer:section agent-managed=build_history -->
 | Date | Status | Notes |
 |------|--------|-------|
-| 2026-06-29T20:48:26Z | analyzed | initial repo analysis |
-| 2026-06-29T20:54:49Z | success | deployed https://relaxed-weasel-writefreely.cloud.nexlayer.ai |
+| 2026-06-29T21:10:25Z | analyzed | initial repo analysis |
+| 2026-06-29T21:16:01Z | success | deployed https://relaxed-weasel-writefreely.cloud.nexlayer.ai |
 <!-- nexlayer:end -->
+
 
