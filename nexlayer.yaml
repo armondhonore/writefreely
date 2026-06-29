@@ -8,5 +8,5 @@ application:
     - 8080
     volumes:
     - name: writefreely-data
-      mountPath: /data
+      mountPath: /writefreely/data
       size: 5Gi
