@@ -2,7 +2,7 @@ application:
   name: writefreely
   pods:
   - name: app
-    image: writeas/writefreely:latest
+    image: docker.io/writeas/writefreely:latest
     path: /
     servicePorts:
     - 8080
